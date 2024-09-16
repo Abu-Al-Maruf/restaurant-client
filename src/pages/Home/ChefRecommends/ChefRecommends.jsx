@@ -10,7 +10,7 @@ const ChefRecommends = () => {
       ></SectionTitle>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="flex flex-col relative max-w-[420px] items-center text-center bg-[#F3F3F3]">
+        <div className="flex flex-col relative rounded max-w-[420px] items-center text-center bg-[#F3F3F3]">
           <img className="w-full " src={salad} alt="" />
           <div className="p-4">
             <h3 className="mt-4 font-semibold text-[#151515] text-2xl">
@@ -24,7 +24,7 @@ const ChefRecommends = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col relative max-w-[420px] items-center text-center bg-[#F3F3F3]">
+        <div className="flex flex-col relative rounded max-w-[420px] items-center text-center bg-[#F3F3F3]">
           <img className="w-full " src={salad} alt="" />
           <div className="p-4">
             <h3 className="mt-4 font-semibold text-[#151515] text-2xl">
@@ -38,7 +38,7 @@ const ChefRecommends = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col relative max-w-[420px] items-center text-center bg-[#F3F3F3]">
+        <div className="flex flex-col relative rounded max-w-[420px] items-center text-center bg-[#F3F3F3]">
           <img className="w-full " src={salad} alt="" />
           <div className="p-4">
             <h3 className="mt-4 font-semibold text-[#151515] text-2xl">

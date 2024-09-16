@@ -3,7 +3,7 @@ import SectionTitle from "../../../components/SectionTitle";
 
 const PopularMenu = () => {
   const [popularMenu, setPopularMenu] = useState([]);
-  console.log(popularMenu);
+
   useEffect(() => {
     fetch("/menu.json")
       .then((res) => res.json())
