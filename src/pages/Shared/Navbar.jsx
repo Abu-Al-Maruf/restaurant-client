@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import cart from "../../assets/icon/cart.png";
@@ -13,20 +14,65 @@ const Navbar = () => {
 
   const navLinks = (
     <>
-      <li className="hover:text-[#EEFF25]">
-        <Link to="/">Home</Link>
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? "text-[#EEFF25] font-semibold"
+              : "hover:text-[#EEFF25] text-white"
+          }
+        >
+          Home
+        </NavLink>
       </li>
-      <li className="hover:text-[#EEFF25]">
-        <Link to="/contact">Contact Us</Link>
+      <li>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            isActive
+              ? "text-[#EEFF25] font-semibold"
+              : "hover:text-[#EEFF25] text-white"
+          }
+        >
+          Contact Us
+        </NavLink>
       </li>
-      <li className="hover:text-[#EEFF25]">
-        <Link to="/dashboard">Dashboard</Link>
+      <li>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            isActive
+              ? "text-[#EEFF25] font-semibold"
+              : "hover:text-[#EEFF25] text-white"
+          }
+        >
+          Dashboard
+        </NavLink>
       </li>
-      <li className="hover:text-[#EEFF25]">
-        <Link to="/menu">Our Menu</Link>
+      <li>
+        <NavLink
+          to="/menu"
+          className={({ isActive }) =>
+            isActive
+              ? "text-[#EEFF25] font-semibold"
+              : "hover:text-[#EEFF25] text-white"
+          }
+        >
+          Our Menu
+        </NavLink>
       </li>
-      <li className="hover:text-[#EEFF25]">
-        <Link to="/shop">Our Shop</Link>
+      <li>
+        <NavLink
+          to="/shop/salad"
+          className={({ isActive }) =>
+            isActive
+              ? "text-[#EEFF25] font-semibold"
+              : "hover:text-[#EEFF25] text-white"
+          }
+        >
+          Our Shop
+        </NavLink>
       </li>
     </>
   );

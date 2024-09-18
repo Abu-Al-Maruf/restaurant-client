@@ -1,7 +1,13 @@
 import SectionTitle from "../../../components/SectionTitle";
-import salad from "../../../assets/menu/salad-bg.jpg";
+import FoodCard from "../../../components/FoodCard";
+import useMenu from "../../../hooks/useMenu";
 
 const ChefRecommends = () => {
+  const [Menu] = useMenu();
+
+  const salad = Menu.filter((item) => item.category === "salad").slice(0, 3);
+
+  console.log(salad);
   return (
     <section className="lg:w-4/5 sm:w-11/12 w-4/5 mx-auto pb-20">
       <SectionTitle
@@ -10,48 +16,9 @@ const ChefRecommends = () => {
       ></SectionTitle>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="flex flex-col relative rounded max-w-[420px] items-center text-center bg-[#F3F3F3]">
-          <img className="w-full " src={salad} alt="" />
-          <div className="p-4">
-            <h3 className="mt-4 font-semibold text-[#151515] text-2xl">
-              Caeser Salad
-            </h3>
-            <p className="text-[#151515] ">
-              Lettuce, Eggs, Parmesan Cheese, Chicken Breast Fillets.
-            </p>
-            <button className="py-4 px-7 mt-6 rounded-lg font-medium text-[#BB8506] bg-transparent border-0 border-b-4 border-[#BB8506] hover:bg-[#1F2937] transition-all hover:border-b-[#1F2937]">
-              View Full Menu
-            </button>
-          </div>
-        </div>
-        <div className="flex flex-col relative rounded max-w-[420px] items-center text-center bg-[#F3F3F3]">
-          <img className="w-full " src={salad} alt="" />
-          <div className="p-4">
-            <h3 className="mt-4 font-semibold text-[#151515] text-2xl">
-              Caeser Salad
-            </h3>
-            <p className="text-[#151515] ">
-              Lettuce, Eggs, Parmesan Cheese, Chicken Breast Fillets.
-            </p>
-            <button className="py-4 px-7 mt-6 rounded-lg font-medium text-[#BB8506] bg-transparent border-0 border-b-4 border-[#BB8506] hover:bg-[#1F2937] transition-all hover:border-b-[#1F2937]">
-              View Full Menu
-            </button>
-          </div>
-        </div>
-        <div className="flex flex-col relative rounded max-w-[420px] items-center text-center bg-[#F3F3F3]">
-          <img className="w-full " src={salad} alt="" />
-          <div className="p-4">
-            <h3 className="mt-4 font-semibold text-[#151515] text-2xl">
-              Caeser Salad
-            </h3>
-            <p className="text-[#151515] ">
-              Lettuce, Eggs, Parmesan Cheese, Chicken Breast Fillets.
-            </p>
-            <button className="py-4 px-7 mt-6 rounded-lg font-medium text-[#BB8506] bg-transparent border-0 border-b-4 border-[#BB8506] hover:bg-[#1F2937] transition-all hover:border-b-[#1F2937]">
-              View Full Menu
-            </button>
-          </div>
-        </div>
+        {salad.map((item) => (
+          <FoodCard key={item._id} item={item}></FoodCard>
+        ))}
       </div>
     </section>
   );

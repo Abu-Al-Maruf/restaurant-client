@@ -11,7 +11,7 @@ const Testimonials = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    fetch("/reviews.json")
+    fetch("http://localhost:5000/reviews")
       .then((res) => res.json())
       .then((data) => {
         setReviews(data);
@@ -41,7 +41,11 @@ const Testimonials = () => {
                 numberOfStars={5}
                 name="rating"
               />
-              <img className="max-w-[50px] md:max-w-[100px]" src={quote} alt="" />
+              <img
+                className="max-w-[50px] md:max-w-[100px]"
+                src={quote}
+                alt=""
+              />
               <p className="text-[#444] text-base md:text-lg leading-6 md:leading-8 px-2">
                 {review.details}
               </p>
