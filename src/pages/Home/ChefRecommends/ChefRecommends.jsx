@@ -7,7 +7,7 @@ const ChefRecommends = () => {
 
   const salad = Menu.filter((item) => item.category === "salad").slice(0, 3);
 
-  console.log(salad);
+  // console.log(salad);
   return (
     <section className="lg:w-4/5 sm:w-11/12 w-4/5 mx-auto pb-20">
       <SectionTitle
