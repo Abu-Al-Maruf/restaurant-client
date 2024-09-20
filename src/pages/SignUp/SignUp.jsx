@@ -2,8 +2,60 @@ import { FaFacebookF, FaGithub, FaGoogle } from "react-icons/fa";
 import signUpBg from "../../assets/others/authentication.png";
 import authenticationImg from "../../assets/others/authentication2.png";
 import { Link } from "react-router-dom";
+import {
+  LoadCanvasTemplate,
+  loadCaptchaEnginge,
+  validateCaptcha,
+} from "react-simple-captcha";
+import toast from "react-hot-toast";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const SignUp = () => {
+  const captchaRef = useRef(null);
+  const [isCaptchaValid, setIsCaptchaValid] = useState(false);
+  const { createUser } = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    if (!isCaptchaValid) {
+      toast.error("Please validate the captcha first.");
+      return;
+    }
+    console.log(data);
+    createUser(data.email, data.password)
+    .then((res) => {
+      console.log(res.user);
+      toast.success("Sign up successful!");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    reset();
+  };
+
+  useEffect(() => {
+    loadCaptchaEnginge(6);
+  }, []);
+
+  const handleValidateCaptcha = () => {
+    const user_captcha_value = captchaRef.current.value;
+    if (validateCaptcha(user_captcha_value)) {
+      setIsCaptchaValid(true);
+      toast.success("Captcha is valid");
+    } else {
+      setIsCaptchaValid(false);
+      toast.error("Captcha is invalid");
+    }
+  };
+
   return (
     <section
       className="bg-cover bg-center py-8 md:py-16 px-4 md:px-20"
@@ -31,7 +83,8 @@ const SignUp = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
             Sign Up
           </h2>
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* name  */}
             <div className="mb-4">
               <label
                 htmlFor="name"
@@ -42,12 +95,15 @@ const SignUp = () => {
               <input
                 type="text"
                 id="name"
+                {...register("name", { required: true })}
                 className="w-full px-3 py-3 border rounded-md text-sm"
                 placeholder="Enter your name"
-                required
               />
+              {errors.name && (
+                <span className="text-red-500">Name is required</span>
+              )}
             </div>
-
+            {/* email  */}
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -58,12 +114,16 @@ const SignUp = () => {
               <input
                 type="email"
                 id="email"
+                {...register("email", { required: true })}
                 className="w-full px-3 py-3 border rounded-md text-sm"
                 placeholder="Enter your email"
-                required
               />
+              {errors.email && (
+                <span className="text-red-500">Email is required</span>
+              )}
             </div>
 
+            {/* password  */}
             <div className="mb-4">
               <label
                 htmlFor="password"
@@ -74,18 +134,61 @@ const SignUp = () => {
               <input
                 type="password"
                 id="password"
+                {...register("password", {
+                  required: true,
+                  minLength: 6,
+                  pattern: /(?=.*[A-Z])(?=.*[a-z])(?=.*[@$!%*?&])/,
+                })}
                 className="w-full px-3 py-3 border rounded-md text-sm"
                 placeholder="Enter your password"
+              />
+              {errors.password?.type === "required" && (
+                <span className="text-red-500">Password is required</span>
+              )}
+              {errors.password?.type === "minLength" && (
+                <span className="text-red-500">
+                  Password must be at least 6 characters
+                </span>
+              )}
+              {errors.password?.type === "pattern" && (
+                <span className="text-red-500">
+                  Password must include at least one uppercase letter, one
+                  lowercase letter, and one special character.
+                </span>
+              )}
+            </div>
+            {/* captcha form  */}
+            <div className="mb-4">
+              <LoadCanvasTemplate />
+
+              <input
+                type="text"
+                ref={captchaRef}
+                className="w-full px-3 py-3 border rounded-md text-sm mt-2"
+                placeholder="Enter the captcha above"
                 required
               />
+              <button
+                type="button"
+                className="btn btn-sm btn-primary mt-2"
+                onClick={handleValidateCaptcha}
+              >
+                Validate Captcha
+              </button>
             </div>
 
-            <button
+            {/* sign up button  */}
+
+            <input
               type="submit"
-              className="w-full bg-[#d1a054b3] text-white py-3 rounded-md hover:bg-[#d19f54] text-sm"
-            >
-              Sign Up
-            </button>
+              value="Sign Up"
+              className={`w-full py-3 rounded-md text-sm ${
+                isCaptchaValid
+                  ? "bg-[#d1a054b3] text-white hover:bg-[#d19f54] cursor-pointer"
+                  : "bg-gray-300 text-gray-500 "
+              }`}
+              disabled={!isCaptchaValid}
+            />
           </form>
           <p className="mt-4 text-center text-sm text-[#D1A054]">
             Already have an account?{" "}

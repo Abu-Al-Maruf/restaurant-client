@@ -2,14 +2,56 @@ import { FaFacebookF, FaGithub, FaGoogle } from "react-icons/fa";
 import loginBg from "../../assets/others/authentication.png";
 import authenticationImg from "../../assets/others/authentication2.png";
 import { Link } from "react-router-dom";
+import {
+  loadCaptchaEnginge,
+  LoadCanvasTemplate,
+  validateCaptcha,
+} from "react-simple-captcha";
+import { useContext, useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
+import { AuthContext } from "../../providers/AuthProvider";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
-    console.log(email, password);
+  const captchaRef = useRef(null);
+  const [isCaptchaValid, setIsCaptchaValid] = useState(false);
+  const { loginUser } = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  useEffect(() => {
+    loadCaptchaEnginge(6);
+  }, []);
+
+  const onSubmit = (data) => {
+    if (!isCaptchaValid) {
+      toast.error("Please validate the captcha first.");
+      return;
+    }
+
+    loginUser(data.email, data.password)
+      .then((res) => {
+        console.log(res.user);
+        toast.success("Login successful!");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
+  };
+
+  const handleValidateCaptcha = () => {
+    const user_captcha_value = captchaRef.current.value;
+    if (validateCaptcha(user_captcha_value)) {
+      setIsCaptchaValid(true);
+      toast.success("Captcha is valid");
+    } else {
+      setIsCaptchaValid(false);
+      toast.error("Captcha is invalid");
+    }
   };
 
   return (
@@ -39,7 +81,8 @@ const Login = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
             Login
           </h2>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* email  */}
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -50,12 +93,16 @@ const Login = () => {
               <input
                 type="email"
                 id="email"
+                {...register("email", { required: "Email is required" })}
                 className="w-full px-3 py-3 border rounded-md text-sm"
                 placeholder="Enter your email"
-                required
               />
+              {errors.email && (
+                <span className="text-red-500">{errors.email.message}</span>
+              )}
             </div>
 
+            {/* password  */}
             <div className="mb-4">
               <label
                 htmlFor="password"
@@ -66,18 +113,46 @@ const Login = () => {
               <input
                 type="password"
                 id="password"
+                {...register("password", { required: "Password is required" })}
                 className="w-full px-3 py-3 border rounded-md text-sm"
                 placeholder="Enter your password"
-                required
               />
+              {errors.password && (
+                <span className="text-red-500">{errors.password.message}</span>
+              )}
             </div>
 
-            <button
+            {/* captcha form  */}
+            <div className="mb-4">
+              <LoadCanvasTemplate />
+
+              <input
+                type="text"
+                ref={captchaRef}
+                className="w-full px-3 py-3 border rounded-md text-sm mt-2"
+                placeholder="Enter the captcha above"
+                required
+              />
+              <button
+                type="button"
+                className="btn btn-sm btn-primary mt-2"
+                onClick={handleValidateCaptcha}
+              >
+                Validate Captcha
+              </button>
+            </div>
+
+            {/* login button  */}
+            <input
               type="submit"
-              className="w-full bg-[#d1a054b3] text-white py-3 rounded-md hover:bg-[#d19f54] text-sm"
-            >
-              Sign In
-            </button>
+              value="Login"
+              className={`w-full py-3 rounded-md text-sm ${
+                isCaptchaValid
+                  ? "bg-[#d1a054b3] text-white hover:bg-[#d19f54] cursor-pointer"
+                  : "bg-gray-300 text-gray-500 "
+              }`}
+              disabled={!isCaptchaValid}
+            />
           </form>
           <p className="mt-4 text-center text-sm text-[#D1A054]">
             New here?{" "}
@@ -91,13 +166,13 @@ const Login = () => {
               Or sign in with
             </p>
             <div className="flex justify-center space-x-4">
-              <button className="p-2 border border-[#444] rounded-full hover:bg-gray-400 transition-colors duration-2 00">
+              <button className="p-2 border border-[#444] rounded-full hover:bg-gray-400 transition-colors duration-200">
                 <FaFacebookF className="text-[#444] text-lg" />
               </button>
-              <button className="p-2 border border-[#444] rounded-full hover:bg-gray-400 transition-colors duration-2  00">
+              <button className="p-2 border border-[#444] rounded-full hover:bg-gray-400 transition-colors duration-200">
                 <FaGoogle className="text-[#444] text-lg" />
               </button>
-              <button className="p-2 border border-[#444] text-[#444] rounded-full hover:bg-gray-400 transition-colors duration-2 00">
+              <button className="p-2 border border-[#444] text-[#444] rounded-full hover:bg-gray-400 transition-colors duration-200">
                 <FaGithub className="text-lg" />
               </button>
             </div>
