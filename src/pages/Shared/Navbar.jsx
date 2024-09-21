@@ -1,16 +1,18 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import cart from "../../assets/icon/cart.png";
+import cartImg from "../../assets/icon/cart.png";
 import profile from "../../assets/others/profile.png";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
+import useCart from "../../hooks/useCart";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [cart] = useCart();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -119,12 +121,15 @@ const Navbar = () => {
           <ul className="flex items-center gap-4 ">{navLinks}</ul>
 
           <div className="flex items-center gap-4">
+            {/* cart icon */}
             <div className="relative cursor-pointer">
-              <img className="w-10  cursor-pointer" src={cart} alt="Cart" />
+              <img className="w-10  cursor-pointer" src={cartImg} alt="Cart" />
+
               <span className="absolute bottom-[2px] right-[2px] bg-red-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-sm font-medium shadow-md">
-                {1}
+                {cart.length}
               </span>
             </div>
+
             <div className="flex items-center gap-2">
               {user ? (
                 <button onClick={handleLogOut} className="hover:text-[#EEFF25]">
@@ -175,7 +180,7 @@ const Navbar = () => {
               </Link>
             )}
             <div className="relative cursor-pointer">
-              <img className="w-10  cursor-pointer" src={cart} alt="Cart" />
+              <img className="w-10  cursor-pointer" src={cartImg} alt="Cart" />
               <span className="absolute bottom-[2px] right-[2px] bg-red-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-sm font-medium shadow-md">
                 {1}
               </span>
