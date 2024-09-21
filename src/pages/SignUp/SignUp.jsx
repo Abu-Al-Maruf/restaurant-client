@@ -1,21 +1,22 @@
 import { FaFacebookF, FaGithub, FaGoogle } from "react-icons/fa";
 import signUpBg from "../../assets/others/authentication.png";
 import authenticationImg from "../../assets/others/authentication2.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   LoadCanvasTemplate,
   loadCaptchaEnginge,
   validateCaptcha,
 } from "react-simple-captcha";
 import toast from "react-hot-toast";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../../providers/AuthProvider";
+import useAuth from "../../hooks/useAuth";
 
 const SignUp = () => {
   const captchaRef = useRef(null);
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
-  const { createUser } = useContext(AuthContext);
+  const { createUser, updateUserProfile, googleLogin } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -30,13 +31,16 @@ const SignUp = () => {
     }
     console.log(data);
     createUser(data.email, data.password)
-    .then((res) => {
-      console.log(res.user);
-      toast.success("Sign up successful!");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((res) => {
+        console.log(res.user);
+        toast.success("Sign up successful!");
+        updateUserProfile(data.name, data.photo);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
 
     reset();
   };
@@ -54,6 +58,18 @@ const SignUp = () => {
       setIsCaptchaValid(false);
       toast.error("Captcha is invalid");
     }
+  };
+
+  const handleGoogleSignIn = () => {
+    googleLogin()
+      .then(() => {
+        toast.success("Sign up successful!");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
   };
 
   return (
@@ -205,7 +221,10 @@ const SignUp = () => {
               <button className="p-2 border border-[#444] rounded-full hover:bg-gray-400 transition-colors duration-200">
                 <FaFacebookF className="text-[#444] text-lg" />
               </button>
-              <button className="p-2 border border-[#444] rounded-full hover:bg-gray-400 transition-colors duration-200">
+              <button
+                className="p-2 border border-[#444] rounded-full hover:bg-gray-400 transition-colors duration-200"
+                onClick={handleGoogleSignIn}
+              >
                 <FaGoogle className="text-[#444] text-lg" />
               </button>
               <button className="p-2 border border-[#444] text-[#444] rounded-full hover:bg-gray-400 transition-colors duration-200">

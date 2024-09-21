@@ -1,15 +1,26 @@
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import cart from "../../assets/icon/cart.png";
 import profile from "../../assets/others/profile.png";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { AuthContext } from "../../providers/AuthProvider";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogOut = () => {
+    logOut().then(() => {
+      toast.success("Logged out successfully");
+      navigate("/");
+    });
   };
 
   const navLinks = (
@@ -108,9 +119,22 @@ const Navbar = () => {
           <ul className="flex items-center gap-4 ">{navLinks}</ul>
 
           <div className="flex items-center gap-4">
-            <img className="w-10 cursor-pointer" src={cart} alt="Cart" />
+            <div className="relative cursor-pointer">
+              <img className="w-10  cursor-pointer" src={cart} alt="Cart" />
+              <span className="absolute bottom-[2px] right-[2px] bg-red-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-sm font-medium shadow-md">
+                {1}
+              </span>
+            </div>
             <div className="flex items-center gap-2">
-              <Link to="/signout">Sign Out</Link>
+              {user ? (
+                <button onClick={handleLogOut} className="hover:text-[#EEFF25]">
+                  Logout
+                </button>
+              ) : (
+                <Link to="/login" className="hover:text-[#EEFF25]">
+                  Login
+                </Link>
+              )}
               <img
                 className="w-10 cursor-pointer rounded-full"
                 src={profile}
@@ -141,8 +165,21 @@ const Navbar = () => {
               src={profile}
               alt="Profile"
             />
-            <Link to="/signout">Sign Out</Link>
-            <img className="w-10 cursor-pointer" src={cart} alt="Cart" />
+            {user ? (
+              <button onClick={handleLogOut} className="hover:text-[#EEFF25]">
+                Logout
+              </button>
+            ) : (
+              <Link to="/login" className="hover:text-[#EEFF25]">
+                Login
+              </Link>
+            )}
+            <div className="relative cursor-pointer">
+              <img className="w-10  cursor-pointer" src={cart} alt="Cart" />
+              <span className="absolute bottom-[2px] right-[2px] bg-red-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-sm font-medium shadow-md">
+                {1}
+              </span>
+            </div>
           </div>
         </div>
       </div>
