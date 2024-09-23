@@ -11,12 +11,15 @@ import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const SignUp = () => {
   const captchaRef = useRef(null);
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
   const { createUser, updateUserProfile, googleLogin } = useAuth();
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
+
   const {
     register,
     handleSubmit,
@@ -29,20 +32,29 @@ const SignUp = () => {
       toast.error("Please validate the captcha first.");
       return;
     }
-    console.log(data);
+
     createUser(data.email, data.password)
       .then((res) => {
         console.log(res.user);
-        toast.success("Sign up successful!");
-        updateUserProfile(data.name, data.photo);
-        navigate("/");
+
+        const userInfo = {
+          name: data.name,
+          email: data.email,
+        };
+        // userinfo save to db
+        axiosPublic.post("/users", userInfo).then((res) => {
+          if (res.data.insertedId) {
+            reset();
+            updateUserProfile(data.name, data.photo);
+            toast.success("Sign up successful!");
+            navigate("/");
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
         toast.error(error.message);
       });
-
-    reset();
   };
 
   useEffect(() => {
@@ -62,9 +74,16 @@ const SignUp = () => {
 
   const handleGoogleSignIn = () => {
     googleLogin()
-      .then(() => {
-        toast.success("Sign up successful!");
-        navigate("/");
+      .then((res) => {
+        const userInfo = {
+          name: res.user.displayName,
+          email: res.user.email,
+        };
+        axiosPublic.post("/users", userInfo).then((res) => {
+          console.log(res.data);
+          toast.success("Google sign in successful!");
+          navigate("/");
+        });
       })
       .catch((error) => {
         console.log(error);

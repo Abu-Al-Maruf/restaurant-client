@@ -11,6 +11,7 @@ import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useRef, useState } from "react";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Login = () => {
   const captchaRef = useRef(null);
@@ -19,6 +20,7 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
+  const axiosPublic = useAxiosPublic();
 
   const {
     register,
@@ -60,13 +62,21 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleSignIn = () => {
     googleLogin()
-      .then(() => {
-        toast.success("login successful!");
-        navigate(from, { replace: true });
+      .then((res) => {
+        const userInfo = {
+          name: res.user.displayName,
+          email: res.user.email,
+        };
+        axiosPublic.post("/users", userInfo).then((res) => {
+          console.log(res.data);
+          toast.success("Google sign in successful!");
+          navigate(from, { replace: true });
+        });
       })
       .catch((error) => {
+        console.log(error);
         toast.error(error.message);
       });
   };
@@ -188,7 +198,7 @@ const Login = () => {
               </button>
               <button
                 className="p-2 border border-[#444] rounded-full hover:bg-gray-400 transition-colors duration-200"
-                onClick={handleGoogleLogin}
+                onClick={handleGoogleSignIn}
               >
                 <FaGoogle className="text-[#444] text-lg" />
               </button>

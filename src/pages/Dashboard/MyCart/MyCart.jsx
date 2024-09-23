@@ -42,7 +42,9 @@ const MyCart = () => {
           <h3 className="text-xl font-semibold">
             Total orders: {cart?.length}
           </h3>
-          <h3 className="text-xl font-semibold">total price: ${totalPrice}</h3>
+          <h3 className="text-xl font-semibold">
+            total price: ${totalPrice.toFixed(2)}
+          </h3>
           <button className="text-white bg-[#D1A054] text-lg rounded-lg py-3 px-4 hover:scale-[.98]">
             PAY
           </button>
