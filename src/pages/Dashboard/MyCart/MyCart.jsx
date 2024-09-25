@@ -55,13 +55,14 @@ const MyCart = () => {
             {/* head */}
             <thead>
               <tr className="bg-[#D1A054] text-white">
-                <th></th>
-                <th>ITEM IMAGE</th>
-                <th>ITEM NAME</th>
-                <th>PRICE</th>
-                <th>ACTION</th>
+                <th className="rounded-tl-xl py-4"></th>
+                <th className="py-4">ITEM IMAGE</th>
+                <th className="py-4">ITEM NAME</th>
+                <th className="py-4">PRICE</th>
+                <th className="rounded-tr-xl py-4">ACTION</th>
               </tr>
             </thead>
+
             <tbody>
               {cart.map((item, idx) => (
                 <tr key={item._id}>
