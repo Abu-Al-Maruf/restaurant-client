@@ -14,6 +14,7 @@ import AddItems from "../pages/Dashboard/Admin/AddItems";
 import ManageItems from "../pages/Dashboard/Admin/ManageItems";
 import ManageBookings from "../pages/Dashboard/Admin/ManageBookings";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers";
+import AdminRoute from "./AdminRoute";
 
 const router = createBrowserRouter([
   {
@@ -51,29 +52,51 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      // user routes
       {
         path: "my-cart",
         element: <MyCart></MyCart>,
       },
+      // admin routes
       {
         path: "admin-home",
-        element: <AdminHome></AdminHome>,
+        element: (
+          <AdminRoute>
+            <AdminHome></AdminHome>
+          </AdminRoute>
+        ),
       },
       {
         path: "add-items",
-        element: <AddItems></AddItems>,
+        element: (
+          <AdminRoute>
+            <AddItems></AddItems>
+          </AdminRoute>
+        ),
       },
       {
         path: "manage-items",
-        element: <ManageItems></ManageItems>,
+        element: (
+          <AdminRoute>
+            <ManageItems></ManageItems>
+          </AdminRoute>
+        ),
       },
       {
         path: "manage-bookings",
-        element: <ManageBookings></ManageBookings>,
+        element: (
+          <AdminRoute>
+            <ManageBookings></ManageBookings>
+          </AdminRoute>
+        ),
       },
       {
         path: "all-users",
-        element: <AllUsers></AllUsers>,
+        element: (
+          <AdminRoute>
+            <AllUsers></AllUsers>
+          </AdminRoute>
+        ),
       },
     ],
   },
