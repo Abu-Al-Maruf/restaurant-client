@@ -13,10 +13,11 @@ import { IoWalletSharp } from "react-icons/io5";
 import { MdEmail, MdFeedback, MdShoppingBag } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
 import useAdmin from "../../../hooks/useAdmin";
+import useCart from "../../../hooks/useCart";
 
 const SideNav = () => {
   const [isAdmin] = useAdmin();
-
+  const [cart] = useCart();
   return (
     <div className="w-1/5 h-auto bg-[#D1A054] px-8 py-10">
       <Link
@@ -127,7 +128,7 @@ const SideNav = () => {
                       : "hover:text-white flex items-center gap-2 py-3 cursor-pointer transition-colors duration-100"
                   }
                 >
-                  <FaCalendarAlt className="w-6 h-6" />
+                  <FaCalendarAlt className="w-6 h-6"/>
                   Reservation
                 </NavLink>
               </li>
@@ -154,7 +155,7 @@ const SideNav = () => {
                   }
                 >
                   <FaCartShopping className="w-6 h-6" />
-                  My Cart
+                  My Cart {cart?.length > 0 && <span>({cart?.length})</span>}
                 </NavLink>
               </li>
               <li>

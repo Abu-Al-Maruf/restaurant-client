@@ -11,13 +11,13 @@ import CategoryCover from "../../components/CategoryCover";
 import SectionTitle from "../../components/SectionTitle";
 
 const Menu = () => {
-  const [Menu] = useMenu();
+  const [menu] = useMenu();
 
-  const offers = Menu.filter((item) => item.category === "offered");
-  const desserts = Menu.filter((item) => item.category === "dessert");
-  const pizzas = Menu.filter((item) => item.category === "pizza");
-  const salads = Menu.filter((item) => item.category === "salad");
-  const soups = Menu.filter((item) => item.category === "soup");
+  const offers = menu.filter((item) => item.category === "offered");
+  const desserts = menu.filter((item) => item.category === "dessert");
+  const pizzas = menu.filter((item) => item.category === "pizza");
+  const salads = menu.filter((item) => item.category === "salad");
+  const soups = menu.filter((item) => item.category === "soup");
 
   return (
     <section>

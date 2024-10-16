@@ -3,6 +3,7 @@ import SectionTitle from "../../../components/SectionTitle";
 import useCart from "../../../hooks/useCart";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
 
 const MyCart = () => {
   const [cart, refetch] = useCart();
@@ -45,9 +46,9 @@ const MyCart = () => {
           <h3 className="text-xl font-semibold">
             total price: ${totalPrice.toFixed(2)}
           </h3>
-          <button className="text-white bg-[#D1A054] text-lg rounded-lg py-3 px-4 hover:scale-[.98]">
+          <Link to="/dashboard/payment" className="text-white bg-[#D1A054] text-base rounded-lg py-2 px-4 hover:scale-[.98]">
             PAY
-          </button>
+          </Link>
         </div>
         {/* table data  */}
         <div className="overflow-x-auto mt-4 sm:mt-8">
@@ -77,14 +78,14 @@ const MyCart = () => {
                   </td>
                   <td>{item.name}</td>
                   <td>${item.price}</td>
-                  <th>
+                  <td>
                     <button
                       onClick={() => handleDelete(item._id)}
                       className="text-white bg-[#B91C1C] text-lg rounded-lg p-3"
                     >
                       <RiDeleteBinLine />
                     </button>
-                  </th>
+                  </td>
                 </tr>
               ))}
             </tbody>
